@@ -10,8 +10,9 @@
             margin: 20px;
             padding: 10px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            flex-direction: column;
+            align-items: center;
+            position: relative; /* Added for positioning the footer */
         }
         h1 {
             color: #333;
@@ -27,28 +28,29 @@
             margin-top: -8px; /* Closer to the main title */
         }
         .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            display: flex;
+            justify-content: space-between;
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
         }
         .section {
+            flex: 1;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #f9f9f9;
+            margin: 10px;
         }
         label {
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 10px;
+            display: block;
         }
         input, button {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
-            font-size: 16px;
+            font-size: 14px;
         }
         .result {
             margin-top: 20px;
@@ -80,8 +82,16 @@
             padding: 10px;
             font-family: monospace;
             font-size: 12px; /* Set font size to 12px for textarea */
-            height: 30px; /* Set height to 50% of the previous value */
+            height: 30px; /* Set height to 30px */
             border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 10px;
+            color: grey;
         }
     </style>
 </head>
@@ -91,23 +101,6 @@
     <h1>Project Vulcan</h1>
 
     <div class="container">
-        <!-- Octet to Megabyte Converter Section -->
-        <div class="section">
-            <h2>Octet to Megabyte Converter</h2>
-
-            <label for="ingress">Enter Ingress/Upload Data (in Octets):</label>
-            <input type="number" id="ingress" placeholder="Ingress (Upload) data in Octets" oninput="convertData()">
-
-            <label for="egress">Enter Egress/Download Data (in Octets):</label>
-            <input type="number" id="egress" placeholder="Egress (Download) data in Octets" oninput="convertData()">
-
-            <div class="result">
-                <h3>Results:</h3>
-                <p id="ingressResult">Ingress/Upload in MB: 0.00</p>
-                <p id="egressResult">Egress/Download in MB: 0.00</p>
-            </div>
-        </div>
-
         <!-- LNS Commands Section -->
         <div class="section">
             <h2>LNS Commands</h2>
@@ -141,6 +134,28 @@
                 <button onclick="copyToClipboard('command4')">Copy PPPoE Session IP Address Command</button>
             </div>
         </div>
+
+        <!-- Octet to Megabyte Converter Section -->
+        <div class="section">
+            <h2>Octet to Megabyte Converter</h2>
+
+            <label for="ingress">Enter Ingress/Upload Data (in Octets):</label>
+            <input type="number" id="ingress" placeholder="Ingress (Upload) data in Octets" oninput="convertData()">
+
+            <label for="egress">Enter Egress/Download Data (in Octets):</label>
+            <input type="number" id="egress" placeholder="Egress (Download) data in Octets" oninput="convertData()">
+
+            <div class="result">
+                <h3>Results:</h3>
+                <p id="ingressResult">Ingress/Upload in MB: 0.00</p>
+                <p id="egressResult">Egress/Download in MB: 0.00</p>
+            </div>
+            <button onclick="copyResults()">Copy Results</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Created by: Edmar Llusala
     </div>
 
     <script>
@@ -185,6 +200,21 @@
             // Display results
             document.getElementById('ingressResult').textContent = `Ingress/Upload in MB: ${ingressMB}`;
             document.getElementById('egressResult').textContent = `Egress/Download in MB: ${egressMB}`;
+        }
+
+        // Function to copy results to clipboard
+        function copyResults() {
+            const ingressResult = document.getElementById('ingressResult').textContent;
+            const egressResult = document.getElementById('egressResult').textContent;
+            const results = `${ingressResult}\n${egressResult}`;
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = results;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Results copied to clipboard');
         }
     </script>
 
