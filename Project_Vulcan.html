@@ -1,222 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Octet to Megabyte Converter & LNS Commands</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* Added for positioning the footer */
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            width: 100%;
-            font-size: 36px; /* Larger font for the main title */
-        }
-        h2 {
-            color: #555;
-            text-align: center;
-            width: 100%;
-            font-size: 14px; /* Smaller font for the subtitle */
-            margin-top: -8px; /* Closer to the main title */
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .section {
-            flex: 1;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            margin: 10px;
-        }
-        label {
-            font-size: 14px;
-            margin-top: 10px;
-            display: block;
-        }
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-        }
-        .command-container {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px; /* Set font size to 12px for LNS Commands section */
-        }
-        button {
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 12px; /* Set font size to 12px for textarea */
-            height: 30px; /* Set height to 30px */
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-        }
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 10px;
-            color: grey;
-        }
-    </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Octet to Megabyte Converter & LNS Commands</title>
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           margin: 20px;
+           padding: 10px;
+       }
+       h1 {
+           color: #333;
+           text-align: center;
+           width: 100%;
+           font-size: 36px; /* Larger font for the main title */
+       }
+       h2 {
+           color: #555;
+           text-align: center;
+           width: 100%;
+           font-size: 14px; /* Smaller font for the subtitle */
+           margin-top: -8px; /* Closer to the main title */
+       }
+       .tab {
+           display: flex;
+           justify-content: flex-start; /* Move tabs to the left */
+           margin-bottom: 20px;
+       }
+       .tab button {
+           background-color: #4CAF50;
+           color: white;
+           padding: 14px 20px;
+           border: none;
+           cursor: pointer;
+           transition: 0.3s;
+           font-size: 16px;
+           margin: 0 5px;
+       }
+       .tab button:hover {
+           background-color: #45a049;
+       }
+       .tab button.active {
+           background-color: #45a049;
+       }
+       .tabcontent {
+           display: none;
+           padding: 20px;
+           border: 1px solid #ddd;
+           border-top: none;
+       }
+       .container {
+           display: flex;
+           gap: 20px;
+           width: 100%;
+       }
+       .section {
+           padding: 20px;
+           border: 1px solid #ddd;
+           border-radius: 8px;
+           background-color: #f9f9f9;
+       }
+       label {
+           font-size: 15px; /* Decreased font size */
+           margin-top: 10px;
+           display: block;
+       }
+       input, button {
+           padding: 10px;
+           margin: 5px 0;
+           font-size: 15px; /* Decreased font size */
+       }
+       .command-container {
+           margin-top: 20px;
+           padding: 10px;
+           background-color: #f1f1f1;
+           border-radius: 5px;
+           font-family: monospace;
+           font-size: 12px;
+       }
+       button {
+           cursor: pointer;
+           background-color: #4CAF50;
+           color: white;
+           border: none;
+           border-radius: 5px;
+           padding: 10px;
+       }
+       button:hover {
+           background-color: #45a049;
+       }
+       textarea {
+           width: 100%;
+           padding: 10px;
+           font-family: monospace;
+           font-size: 12px;
+           height: 50px;
+           border: 1px solid #ccc;
+       }
+       .result {
+           margin-top: 20px;
+           padding: 10px;
+           background-color: #f1f1f1;
+           border-radius: 5px;
+       }
+       .created-by {
+           position: fixed;
+           bottom: 10px;
+           right: 10px;
+           font-size: 14px;
+           color: grey;
+       }
+   </style>
 </head>
 <body>
 
-    <!-- Title -->
-    <h1>Project Vulcan</h1>
+   <h1>Project Vulcan</h1>
 
-    <div class="container">
-        <!-- LNS Commands Section -->
-        <div class="section">
-            <h2>LNS Commands</h2>
+   <div class="tab">
+       <button class="tablinks" onclick="openTab(event, 'OctetToMegabyte')" id="defaultOpen">Octet to Megabyte Converter</button>
+       <button class="tablinks" onclick="openTab(event, 'LNSCommands')">LNS Commands</button>
+   </div>
 
-            <label for="ecid">Enter ECID:</label>
-            <input type="text" id="ecid" placeholder="Enter ECID" oninput="generateCommands()">
+   <div id="OctetToMegabyte" class="tabcontent">
+       <div class="section" style="width: 30%;">
+           <h2>Octet to Megabyte Converter</h2>
 
-            <label for="username">Enter Username:</label>
-            <input type="text" id="username" placeholder="Enter Username" oninput="generateCommands()">
+           <label for="ingress">Enter Ingress/Upload Data (in Octets):</label>
+           <input type="number" id="ingress" placeholder="Ingress (Upload) data in Octets" oninput="convertData()">
 
-            <label for="ipaddress">Enter IP Address:</label>
-            <input type="text" id="ipaddress" placeholder="Enter IP Address" oninput="generateCommands()">
+           <label for="egress">Enter Egress/Download Data (in Octets):</label>
+           <input type="number" id="egress" placeholder="Egress (Download) data in Octets" oninput="convertData()">
 
-            <div class="command-container">
-                <h3>Generated Commands:</h3>
+           <div class="result">
+               <h3>Results:</h3>
+               <p id="ingressResult">Ingress/Upload in MB: 0.00</p>
+               <p id="egressResult">Egress/Download in MB: 0.00</p>
+           </div>
+           <button onclick="copyResults()">Copy Results</button>
+       </div>
+   </div>
 
-                <!-- ECID Command -->
-                <textarea id="command1" readonly></textarea>
-                <button onclick="copyToClipboard('command1')">Copy Show log-id Command</button>
+   <div id="LNSCommands" class="tabcontent">
+       <div class="container">
+           <div class="section" style="width: 40%;">
+               <h2>LNS Commands</h2>
 
-                <!-- Username Command -->
-                <textarea id="command2" readonly></textarea>
-                <button onclick="copyToClipboard('command2')">Copy PPPoE Active Subscriber Command</button>
+               <label for="ecid">Enter ECID:</label>
+               <input type="text" id="ecid" placeholder="Enter ECID" style="width: 100%;" oninput="generateCommands()">
 
-                <!-- IP Address Command -->
-                <textarea id="command3" readonly></textarea>
-                <button onclick="copyToClipboard('command3')">Copy PPPoE Session Uptime Command</button>
+               <label for="username">Enter Username:</label>
+               <input type="text" id="username" placeholder="Enter Username" style="width: 100%;" oninput="generateCommands()">
 
-                <!-- Additional IP Address Command -->
-                <textarea id="command4" readonly></textarea>
-                <button onclick="copyToClipboard('command4')">Copy PPPoE Session IP Address Command</button>
-            </div>
-        </div>
+               <label for="ipaddress">Enter IP Address:</label>
+               <input type="text" id="ipaddress" placeholder="Enter IP Address" style="width: 100%;" oninput="generateCommands()">
+           </div>
 
-        <!-- Octet to Megabyte Converter Section -->
-        <div class="section">
-            <h2>Octet to Megabyte Converter</h2>
+           <div class="section" style="width: 55%;">
+               <div class="command-container">
+                   <h3>Generated Commands:</h3>
 
-            <label for="ingress">Enter Ingress/Upload Data (in Octets):</label>
-            <input type="number" id="ingress" placeholder="Ingress (Upload) data in Octets" oninput="convertData()">
+                   <!-- Generated ssh Command -->
+                   <textarea id="sshCommand" readonly></textarea>
+                   <button style="width: 15%;" onclick="copyToClipboard('sshCommand')">Copy</button>
+                   <p>Establish connection to the LNS server.</p>
 
-            <label for="egress">Enter Egress/Download Data (in Octets):</label>
-            <input type="number" id="egress" placeholder="Egress (Download) data in Octets" oninput="convertData()">
+                   <!-- ECID Command -->
+                   <textarea id="command1" readonly></textarea>
+                   <button style="width: 15%;" onclick="copyToClipboard('command1')">Copy</button>
 
-            <div class="result">
-                <h3>Results:</h3>
-                <p id="ingressResult">Ingress/Upload in MB: 0.00</p>
-                <p id="egressResult">Egress/Download in MB: 0.00</p>
-            </div>
-            <button onclick="copyResults()">Copy Results</button>
-        </div>
-    </div>
+                   <!-- Username Command -->
+                   <textarea id="command2" readonly></textarea>
+                   <button style="width: 15%;" onclick="copyToClipboard('command2')">Copy</button>
 
-    <div class="footer">
-        Created by: Edmar Llusala
-    </div>
+                   <!-- IP Address Command -->
+                   <textarea id="command3" readonly></textarea>
+                   <button style="width: 15%;" onclick="copyToClipboard('command3')">Copy</button>
 
-    <script>
-        // Function to generate all commands based on ECID, Username, and IP Address
-        function generateCommands() {
-            const ecid = document.getElementById('ecid').value.trim(); // Trim the input value
-            const username = document.getElementById('username').value.trim(); // Trim the input value
-            const ipAddress = document.getElementById('ipaddress').value.trim(); // Trim the input value
+                   <!-- Additional IP Address Command -->
+                   <textarea id="command4" readonly></textarea>
+                   <button style="width: 15%;" onclick="copyToClipboard('command4')">Copy</button>
+               </div>
+           </div>
+       </div>
+   </div>
 
-            // Generate commands with the inserted values
-            const command1 = `show log log-id 1 | match ${ecid}`;
-            const command2 = `show service active-subscribers subscriber ${username} detail`;
-            const command3 = `show service id 3005066 ppp session user-name ${username} detail`;
-            const command4 = `show service id 3005066 ppp session ip-address ${ipAddress}`;
+   <div class="created-by">Created by: Edmar Llusala</div>
 
-            // Update the text areas with the generated commands
-            document.getElementById('command1').value = command1;
-            document.getElementById('command2').value = command2;
-            document.getElementById('command3').value = command3;
-            document.getElementById('command4').value = command4;
-        }
+   <script>
+       // Function to open the respective tab content
+       function openTab(evt, tabName) {
+           const tabcontent = document.getElementsByClassName("tabcontent");
+           for (let i = 0; i < tabcontent.length; i++) {
+               tabcontent[i].style.display = "none";
+           }
+           const tablinks = document.getElementsByClassName("tablinks");
+           for (let i = 0; i < tablinks.length; i++) {
+               tablinks[i].className = tablinks[i].className.replace(" active", "");
+           }
+           document.getElementById(tabName).style.display = "block";
+           evt.currentTarget.className += " active";
+       }
 
-        // Function to copy the content of a textarea to clipboard
-        function copyToClipboard(commandId) {
-            const commandText = document.getElementById(commandId);
-            commandText.select();
-            document.execCommand('copy');
-        }
+       // Set the default open tab
+       document.getElementById("defaultOpen").click();
 
-        // Function to convert Octets to Megabytes
-        function convertData() {
-            const ingressOctets = document.getElementById('ingress').value;
-            const egressOctets = document.getElementById('egress').value;
+       // Function to generate all commands based on ECID, Username, and IP Address
+       function generateCommands() {
+           const ecid = document.getElementById('ecid').value.trim(); // Trim the input value
+           const username = document.getElementById('username').value.trim(); // Trim the input value
+           const ipAddress = document.getElementById('ipaddress').value.trim(); // Trim the input value
 
-            // Conversion factor from Octets to Megabytes (1 MB = 1048576 Octets)
-            const octetsToMB = 1048576;
+           // Generate commands with the inserted values
+           const command1 = `show log log-id 1 | match ${ecid}`;
+           const command2 = `show service active-subscribers subscriber ${username} detail`;
+           const command3 = `show service id 3005066 ppp session user-name ${username} detail`;
+           const command4 = `show service id 3005066 ppp session ip-address ${ipAddress}`;
 
-            // Convert Octets to Megabytes and round to 2 decimal places
-            const ingressMB = (ingressOctets / octetsToMB).toFixed(2);
-            const egressMB = (egressOctets / octetsToMB).toFixed(2);
+           // Generate SSH command based on username
+           let sshCommand = '';
+           if (username.endsWith('@on.telus.com')) {
+               sshCommand = 'ssh EYRKONAESN01';
+           } else if (username.endsWith('@qc.telus.com')) {
+               sshCommand = 'ssh MTLXPQVVSN01';
+           }
 
-            // Display results
-            document.getElementById('ingressResult').textContent = `Ingress/Upload in MB: ${ingressMB}`;
-            document.getElementById('egressResult').textContent = `Egress/Download in MB: ${egressMB}`;
-        }
+           // Update the text areas with the generated commands
+           document.getElementById('sshCommand').value = sshCommand;
+           document.getElementById('command1').value = command1;
+           document.getElementById('command2').value = command2;
+           document.getElementById('command3').value = command3;
+           document.getElementById('command4').value = command4;
+       }
 
-        // Function to copy results to clipboard
-        function copyResults() {
-            const ingressResult = document.getElementById('ingressResult').textContent;
-            const egressResult = document.getElementById('egressResult').textContent;
-            const results = `${ingressResult}\n${egressResult}`;
+       // Function to copy text to clipboard
+       function copyToClipboard(elementId) {
+           const copyText = document.getElementById(elementId);
+           copyText.select();
+           copyText.setSelectionRange(0, 99999); // For mobile devices
+           document.execCommand("copy");
+       }
 
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = results;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-            alert('Results copied to clipboard');
-        }
-    </script>
+       // Function to convert octets to megabytes
+       function convertData() {
+           const ingress = parseFloat(document.getElementById('ingress').value) || 0;
+           const egress = parseFloat(document.getElementById('egress').value) || 0;
 
+           const ingressMB = (ingress / (1024 * 1024)).toFixed(2);
+           const egressMB = (egress / (1024 * 1024)).toFixed(2);
+
+           document.getElementById('ingressResult').textContent = `Ingress/Upload in MB: ${ingressMB}`;
+           document.getElementById('egressResult').textContent = `Egress/Download in MB: ${egressMB}`;
+       }
+
+       // Function to copy results to clipboard
+       function copyResults() {
+           const ingressResult = document.getElementById('ingressResult').textContent;
+           const egressResult = document.getElementById('egressResult').textContent;
+           const tempTextarea = document.createElement('textarea');
+           tempTextarea.value = `${ingressResult}\n${egressResult}`;
+           document.body.appendChild(tempTextarea);
+           tempTextarea.select();
+           document.execCommand('copy');
+           document.body.removeChild(tempTextarea);
+       }
+   </script>
 </body>
 </html>
