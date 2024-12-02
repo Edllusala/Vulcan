@@ -214,7 +214,7 @@
           const ipAddress = document.getElementById('ipaddress').value.trim(); // Trim the input value
 
           // Generate commands with the inserted values
-          const command1 = `show log log-id 1 | match ${ecid}`;
+          const command1 = `show log log-id 1 | match ${ecid} pre-lines 2`;
           const command2 = `show service active-subscribers subscriber ${username} detail`;
           const command3 = `show service id 3005066 ppp session user-name ${username} detail`;
           const command4 = `show service id 3005066 ppp session ip-address ${ipAddress}`;
